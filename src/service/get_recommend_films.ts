@@ -6,7 +6,7 @@ export async function GetRecommendFilms(){
     const limit=config.PAGE_SIZE
 
     url+="?"+"offset="+offset
-    url+=+"&"+"limit="+limit
+    url+="&"+"limit="+limit
 
     return await fetch(url)
         .then(response => response.json())

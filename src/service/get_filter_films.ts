@@ -6,7 +6,7 @@ export async function GetFilterFilms(film_type:string,film_category:string|strin
     const limit=config.PAGE_SIZE
 
     url+="&"+"offset="+offset
-    url+=+"&"+"limit="+limit
+    url+="&"+"limit="+limit
 
     if (film_category!==undefined){
         url+="&"+"category="+String(film_category)
