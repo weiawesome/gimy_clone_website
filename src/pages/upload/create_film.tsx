@@ -9,7 +9,6 @@ import "@/app/globals.css";
 import 'react-toastify/dist/ReactToastify.css';
 import {RequestCreateFilm} from "@/model/request/film_create";
 import {CreateFilm} from "@/service/create_film";
-import {ResponseFilmCreate} from "@/model/repsonse/film_created";
 
 const CreateFilmMedia: React.FC = () => {
     const [chooseType,setChooseType]=useState<TypeInformation|undefined>(undefined)
