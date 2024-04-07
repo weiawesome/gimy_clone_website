@@ -24,7 +24,6 @@ const FilmInformationPage:React.FC=()=>{
         GetFilmInformation(String(film_id)).then(r => setFilmInformation(r!))
     }, [film_id]);
 
-
     return (
         <main>
             <TitleBar index={filmInformation===undefined ? CategoryMapping.ALL_CATEGORY.index:
@@ -57,7 +56,6 @@ const FilmInformationPage:React.FC=()=>{
                     <AdInformation adType={AdType.WEB_CORNER}></AdInformation>
                 </div>
             </div>
-
             <Footer></Footer>
         </main>
     )
