@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "@/app/globals.css"
 import {ConvertUTCDateToLocalDate, FormatCategory, FormatLocation, GetTypeRouteFormCategory} from "@/service/utils";
 import Link from "next/link";
@@ -10,6 +10,10 @@ interface FilmInformationProps{
 const FilmInformation:React.FC<FilmInformationProps>=({filmInformation})=>{
     const [loadError,setLoadError]=useState(false)
     const [bgLoadError,setBgLoadError]=useState(false)
+    useEffect(() => {
+        setLoadError(false)
+        setBgLoadError(false)
+    }, [filmInformation]);
     return(
         <div>
             <Image alt={"image"} width={200} height={250} className={"lg:hidden filter -z-50 opacity-85 absolute blur drop-shadow-lg w-full h-52 object-cover object-center"} src={bgLoadError?"/icon.png":filmInformation?.resource} onError={()=>{setBgLoadError(true)}}/>
