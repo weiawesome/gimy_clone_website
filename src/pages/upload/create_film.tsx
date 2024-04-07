@@ -9,6 +9,7 @@ import "@/app/globals.css";
 import 'react-toastify/dist/ReactToastify.css';
 import {RequestCreateFilm} from "@/model/request/film_create";
 import {CreateFilm} from "@/service/create_film";
+import {ResponseFilmCreate} from "@/model/repsonse/film_created";
 
 const CreateFilmMedia: React.FC = () => {
     const [chooseType,setChooseType]=useState<TypeInformation|undefined>(undefined)
@@ -80,7 +81,7 @@ const CreateFilmMedia: React.FC = () => {
                     },
                 }
             }
-        ).then()
+        ).then().catch((e)=>{console.log(e)})
     }
     return (
         <main>
@@ -97,7 +98,6 @@ const CreateFilmMedia: React.FC = () => {
                 draggable
                 pauseOnHover
                 theme="light"/>
-            <ToastContainer />
             <p className={"mt-3 text-3xl text-center font-bold"}>創立影片項目</p>
             { submitEnable && resultInformation==="" &&(
                 <div className={"mt-5 mb-16 w-full items-center flex justify-center"}>

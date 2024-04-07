@@ -46,16 +46,18 @@ const AdMedia: React.FC = () => {
                 },
                 success: {
                     render() {
+                        setSubmitEnable(true)
                         return `上傳成功`
                     },
                 },
                 error: {
                     render({data}) {
+                        setSubmitEnable(true)
                         return `上傳失敗 ${data}`
                     },
                 }
             }
-        ).then(()=>setSubmitEnable(true))
+        ).then().catch((e)=>{console.log(e)})
     }
 
     return (
@@ -73,7 +75,6 @@ const AdMedia: React.FC = () => {
                 draggable
                 pauseOnHover
                 theme="light"/>
-            <ToastContainer />
             <p className={"mt-3 text-3xl text-center font-bold"}>上傳廣告</p>
             {submitEnable &&
                 <div className={"mt-10 mb-20 w-full items-center flex justify-center"}>

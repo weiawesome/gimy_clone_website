@@ -42,7 +42,7 @@ const FilmMedia: React.FC = () => {
                     },
                 }
             }
-        ).then()
+        ).then().catch((e)=>{console.log(e)})
     }
     const uploadImageResource=()=>{
         setSubmitEnable(false)
@@ -68,7 +68,7 @@ const FilmMedia: React.FC = () => {
                     },
                 }
             }
-        ).then()
+        ).then().catch((e)=>console.log(e))
     }
     return (
         <main>
@@ -85,7 +85,6 @@ const FilmMedia: React.FC = () => {
                 draggable
                 pauseOnHover
                 theme="light"/>
-            <ToastContainer />
             {submitEnable ?
                 <div className={"flex lg:flex-row flex-col mb-16"}>
                     <div className={"lg:w-2/3 w-full mb-10 lg:mb-0"}>
