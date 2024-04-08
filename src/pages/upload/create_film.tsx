@@ -9,6 +9,7 @@ import "@/app/globals.css";
 import 'react-toastify/dist/ReactToastify.css';
 import {RequestCreateFilm} from "@/model/request/film_create";
 import {CreateFilm} from "@/service/create_film";
+import {UploadToSearchEngine} from "@/service/upload_to_search_engine";
 
 const CreateFilmMedia: React.FC = () => {
     const [chooseType,setChooseType]=useState<TypeInformation|undefined>(undefined)
@@ -24,6 +25,30 @@ const CreateFilmMedia: React.FC = () => {
     const thisYear =new Date().getFullYear()
     const [submitEnable,setSubmitEnable]=useState(true);
     const [resultInformation,setResultInformation]=useState("")
+
+    const uploadToSearchEngine=(film_id:string)=>{
+        toast.promise(
+            UploadToSearchEngine(film_id),
+            {
+                pending: {
+                    render() {
+                        return `上傳至搜索引擎中......`
+                    },
+                    icon: false,
+                },
+                success: {
+                    render() {
+                        return `成功上傳至搜索引擎`
+                    },
+                },
+                error: {
+                    render({data}) {
+                        return `上傳失敗 ${data}`
+                    },
+                }
+            }
+        ).then().catch((e)=>{console.log(e)})
+    }
 
     const create=()=>{
         if (titleRef.current===null || titleRef.current?.value===""){
@@ -175,10 +200,9 @@ const CreateFilmMedia: React.FC = () => {
             {resultInformation!=="" &&(
                 <div className={"text-md text-normal-color mt-10 items-center flex justify-evenly flex-col"}>
                     <p className={"text-2xl text-normal-color"}>電影 - ID : {resultInformation}</p>
-                    <button onClick={()=>{setResultInformation("")}} className={"mt-8 font-bold p-5 w-1/2 rounded-lg bg-primary-color"}>繼續上傳</button>
+                    <button onClick={()=>{uploadToSearchEngine(resultInformation);setResultInformation("");}} className={"mt-8 font-bold p-5 w-1/2 rounded-lg bg-primary-color"}>繼續上傳</button>
                 </div>
             )}
-
             <Footer></Footer>
         </main>
     );
