@@ -17,4 +17,5 @@ export const config={
     "ROUTE_CREATE_FILM":"/upload/media",
     "ROUTE_UPLOAD_FILM_IMAGE":"/upload/media/image/",
     "ROUTE_UPLOAD_FILM_RESOURCE":"/upload/media/resource/",
+    "ROUTE_UPLOAD_SEARCH_ENGINE":"/upload/media/search_engine/",
 }
