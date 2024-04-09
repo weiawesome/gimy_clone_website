@@ -34,7 +34,7 @@ const FilmInformationPage:React.FC=()=>{
             <ScrollToTopButton></ScrollToTopButton>
             <FilmInformation filmInformation={filmInformation!}></FilmInformation>
             <div className={"flex justify-between"}>
-                <div className={"flex flex-col lg:w-2/3"}>
+                <div className={"flex w-full flex-col lg:w-2/3"}>
                     <FilmRoutesInformation chose_state={false} chosen_film_route={""} chosen_episode={""} film_id={String(film_id)}></FilmRoutesInformation>
                     <AdInformation adType={AdType.WEB_BAR}></AdInformation>
                     <div className={"w-full m-3"}>
