@@ -43,6 +43,8 @@ Fetch the data by [backend project](https://github.com/weiawesome/gimy_clone_api
 ### Film Information Page
 ![film_information.png](assets/film_information.png)
 ![film_information_little.png](assets/film_informaation_little.png)
+### Custom Player Page
+![custom_player.png](assets/custom_player.png)
 ### Search Page
 ![search_by_content.png](assets/search_by_content.png)
 ![search.png](assets/search.png)
