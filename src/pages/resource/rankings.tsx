@@ -14,9 +14,13 @@ import {
     AnimateAnimate, MovieDrama,TvSeriesHKSeries,
     TvSeriesJPSeries, TvSeriesKRSeries, TvSeriesTWSeries, TvSeriesUSSeries
 } from "@/data/category";
+import Head from "next/head";
 const RankingsPage:React.FC=()=>{
     return (
         <main>
+            <Head>
+                <title>Wei-Gimy 維劇迷 每周排行榜</title>
+            </Head>
             <TitleBar index={RankingsTypeInformation.index}></TitleBar>
             <ScrollToTopButton></ScrollToTopButton>
             <p className={"text-center text-normal-color font-bold text-3xl mt-5 mb-10"}>本週維劇迷排行</p>

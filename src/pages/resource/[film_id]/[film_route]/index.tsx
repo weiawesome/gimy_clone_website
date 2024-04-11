@@ -14,6 +14,7 @@ import Footer from "@/components/footer";
 import {CategoryMapping} from "@/data/category";
 import AdInformation from "@/components/ad_information";
 import {AdType} from "@/model/repsonse/ad_information";
+import Head from "next/head";
 
 const FilmResourcePage:React.FC=()=>{
     const router = useRouter();
@@ -26,6 +27,9 @@ const FilmResourcePage:React.FC=()=>{
 
     return (
         <main>
+            <Head>
+                <title>{filmInformation?.title}線上看 {episode} - Wei-Gimy 維劇迷</title>
+            </Head>
             <TitleBar index={filmInformation===undefined ? CategoryMapping.ALL_CATEGORY.index:
                 filmInformation!.category in CategoryMapping?
                 // @ts-ignore

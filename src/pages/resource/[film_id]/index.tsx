@@ -8,12 +8,13 @@ import FilmRoutesInformation from "@/components/film_routes_information";
 import "@/app/globals.css"
 import Sub_title from "@/components/sub_title";
 import {AllCategory, CategoryMapping, QueryMode} from "@/data/category";
-import {FormatCategory, GetTypeRouteFormCategory} from "@/service/utils";
+import {FormatCategory, GetTypeRouteFormCategory, GetTypeValueFormCategory} from "@/service/utils";
 import FilmScrollList from "@/components/film_scroll_list";
 import Footer from "@/components/footer";
 import AdInformation from "@/components/ad_information";
 import {AdType} from "@/model/repsonse/ad_information";
 import RankingSideList from "@/components/ranking_side_list";
+import Head from "next/head";
 
 const FilmInformationPage:React.FC=()=>{
     const router = useRouter();
@@ -26,6 +27,9 @@ const FilmInformationPage:React.FC=()=>{
 
     return (
         <main>
+            <Head>
+                <title>{filmInformation?.title}線上看 - {GetTypeValueFormCategory(filmInformation?.category)} - Wei-Gimy 維劇迷</title>
+            </Head>
             <TitleBar index={filmInformation===undefined ? CategoryMapping.ALL_CATEGORY.index:
                 filmInformation!.category in CategoryMapping?
                 // @ts-ignore

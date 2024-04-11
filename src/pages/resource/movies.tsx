@@ -15,6 +15,7 @@ import {AllLocation, MovieLocation} from "@/data/location";
 import FilterContent from "@/components/filter_content";
 import {OrderTypeList, OrderTypeUpdateTime} from "@/data/order_type";
 import Link from "next/link";
+import Head from "next/head";
 const MoviesPage:React.FC=()=>{
     const router = useRouter();
     const { category,location,releaseYear,page } = router.query;
@@ -22,6 +23,9 @@ const MoviesPage:React.FC=()=>{
 
     return(
         <main>
+            <Head>
+                <title>{MovieTypeInformation.value}線上看首選 - Wei-Gimy 維劇迷</title>
+            </Head>
             <TitleBar index={MovieTypeInformation.index}></TitleBar>
             <ScrollToTopButton></ScrollToTopButton>
             <FilterBar base_url={MovieTypeInformation.route} category={MovieCategory} chosen_category={category===undefined?AllCategory.QUERY_CATEGORY:String(category)} location={MovieLocation} chosen_location={location===undefined?AllLocation.QUERY_LOCATION:String(location)} releaseYear={releaseYear===undefined?"":String(releaseYear)}></FilterBar>

@@ -8,6 +8,7 @@ import {HomeTypeInformation} from "@/data/type";
 import {UploadAd} from "@/service/upload_ad";
 import { ToastContainer, toast } from "react-toastify";
 import ScrollToTopButton from "@/components/scroll_to_top_button";
+import Head from "next/head";
 
 const AdMedia: React.FC = () => {
     const [adType, setAdType] = useState<AdType>(AdType.UNKNOWN);
@@ -47,6 +48,7 @@ const AdMedia: React.FC = () => {
                 success: {
                     render() {
                         setSubmitEnable(true)
+                        setFile(null)
                         return `上傳成功`
                     },
                 },
@@ -62,6 +64,9 @@ const AdMedia: React.FC = () => {
 
     return (
         <main>
+            <Head>
+                <title>廣告上傳- Wei-Gimy 維劇迷</title>
+            </Head>
             <TitleBar index={HomeTypeInformation.index}></TitleBar>
             <ScrollToTopButton></ScrollToTopButton>
             <ToastContainer

@@ -14,12 +14,16 @@ import FilterContent from "@/components/filter_content";
 import Link from "next/link";
 import {AllLocation, VarietyShowsLocation} from "@/data/location";
 import FilterBar from "@/components/filter_bar";
+import Head from "next/head";
 const VarietyShowsPage:React.FC=()=>{
     const router = useRouter();
     const { category,location,releaseYear,page } = router.query;
     const [orderType,setOrderType]=useState(OrderTypeUpdateTime.QUERY_ORDER_TYPE)
     return (
         <main>
+            <Head>
+                <title>{VarietyShowsTypeInformation.value}線上看首選 - Wei-Gimy 維劇迷</title>
+            </Head>
             <TitleBar index={VarietyShowsTypeInformation.index}></TitleBar>
             <ScrollToTopButton></ScrollToTopButton>
             <FilterBar base_url={VarietyShowsTypeInformation.route} category={VarietyShowsCategory} chosen_category={category===undefined?AllCategory.QUERY_CATEGORY:String(category)} location={VarietyShowsLocation} chosen_location={location===undefined?AllLocation.QUERY_LOCATION:String(location)} releaseYear={releaseYear===undefined?"":String(releaseYear)}></FilterBar>

@@ -14,12 +14,16 @@ import Link from "next/link";
 import FilterContent from "@/components/filter_content";
 import FilterBar from "@/components/filter_bar";
 import {AllLocation, AnimateLocation} from "@/data/location";
+import Head from "next/head";
 const TvSeriesPage:React.FC=()=>{
     const router = useRouter();
     const { category,location,releaseYear,page } = router.query;
     const [orderType,setOrderType]=useState(OrderTypeUpdateTime.QUERY_ORDER_TYPE)
     return (
         <main>
+            <Head>
+                <title>{TvSeriesTypeInformation.value}線上看首選 - Wei-Gimy 維劇迷</title>
+            </Head>
             <TitleBar index={TvSeriesTypeInformation.index}></TitleBar>
             <ScrollToTopButton></ScrollToTopButton>
             <FilterBar base_url={TvSeriesTypeInformation.route} category={TvSeriesCategory} chosen_category={category===undefined?AllCategory.QUERY_CATEGORY:String(category)} location={AnimateLocation} chosen_location={location===undefined?AllLocation.QUERY_LOCATION:String(location)} releaseYear={releaseYear===undefined?"":String(releaseYear)}></FilterBar>

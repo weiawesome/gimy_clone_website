@@ -9,6 +9,7 @@ import "@/app/globals.css";
 import 'react-toastify/dist/ReactToastify.css';
 import {UploadFilmResource, UploadImageResource} from "@/service/upload_resource";
 import {UploadToSearchEngine} from "@/service/upload_to_search_engine";
+import Head from "next/head";
 
 const FilmMedia: React.FC = () => {
     const [file, setFile] = useState<File|null>(null);
@@ -136,6 +137,9 @@ const FilmMedia: React.FC = () => {
     }
     return (
         <main>
+            <Head>
+                <title>上傳與修改影片資訊 - Wei-Gimy 維劇迷</title>
+            </Head>
             <TitleBar index={HomeTypeInformation.index}></TitleBar>
             <ScrollToTopButton></ScrollToTopButton>
             <ToastContainer

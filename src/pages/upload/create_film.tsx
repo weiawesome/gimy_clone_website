@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {RequestCreateFilm} from "@/model/request/film_create";
 import {CreateFilm} from "@/service/create_film";
 import {UploadToSearchEngine} from "@/service/upload_to_search_engine";
+import Head from "next/head";
 
 const CreateFilmMedia: React.FC = () => {
     const [chooseType,setChooseType]=useState<TypeInformation|undefined>(undefined)
@@ -109,6 +110,9 @@ const CreateFilmMedia: React.FC = () => {
     }
     return (
         <main>
+            <Head>
+                <title>建立影片項目 - Wei-Gimy 維劇迷</title>
+            </Head>
             <TitleBar index={HomeTypeInformation.index}></TitleBar>
             <ScrollToTopButton></ScrollToTopButton>
             <ToastContainer

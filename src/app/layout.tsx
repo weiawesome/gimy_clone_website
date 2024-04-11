@@ -6,7 +6,7 @@ import React from "react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Wei-Gimy",
+  title: "Wei-Gimy 高清追劇首選",
   description: "Provide stream media for films",
 };
 
