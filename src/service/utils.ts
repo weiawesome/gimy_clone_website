@@ -32,6 +32,17 @@ export const GetTypeRouteFormCategory=(category:string|undefined):string=>{
     }
     return HomeTypeInformation.route
 }
+
+export const GetTypeValueFormCategory=(category:string|undefined):string=>{
+    if (category===undefined){
+        return HomeTypeInformation.value
+    }
+    if (category in CategoryMapping){
+        // @ts-ignore
+        return TypeList[CategoryMapping[category].index].value
+    }
+    return HomeTypeInformation.value
+}
 export const FormatCategory=(category:string|undefined):string=>{
     if (category===undefined){
         return CategoryMapping.ALL_CATEGORY.value
