@@ -7,8 +7,6 @@ import ScrollToTopButton from "@/components/scroll_to_top_button";
 import {toast, ToastContainer} from "react-toastify";
 import "@/app/globals.css";
 import 'react-toastify/dist/ReactToastify.css';
-import {UploadFilmResource, UploadImageResource} from "@/service/upload_resource";
-import {UploadToSearchEngine} from "@/service/upload_to_search_engine";
 import Head from "next/head";
 import {DeleteFilm, DeleteFilmEpisode} from "@/service/delete_resource";
 
@@ -118,7 +116,7 @@ const FilmDelete: React.FC = () => {
                             <div className={"w-3/4 text-sm"}>
                                 <div className={"mb-3 flex flex-row w-full items-center justify-between"}>
                                     <p className={"font-bold"}>影片 ID </p>
-                                    <input ref={idRef} className={"focus:outline-none text-reverse-color rounded bg-plain-color bg-opacity-40 p-1 pl-2 pr-2 text-right"} type={"text"}/>
+                                    <input ref={idEpisodeRef} className={"focus:outline-none text-reverse-color rounded bg-plain-color bg-opacity-40 p-1 pl-2 pr-2 text-right"} type={"text"}/>
                                 </div>
                                 <div className={"mb-3 flex flex-row w-full items-center justify-between"}>
                                     <p className={"font-bold"}>路線</p>
