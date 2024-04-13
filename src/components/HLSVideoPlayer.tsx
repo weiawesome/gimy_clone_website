@@ -68,14 +68,17 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src ,prepare}) => {
         if (isNaN(time)){
             return "0:00"
         }
-        const minutes = Math.floor(time / 60);
-        const seconds = Math.floor(time % 60);
-        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        const hours = Math.floor(time / 60/60)<10?"0"+Math.floor(time / 60/60):String(Math.floor(time / 60/60));
+        const minutes = Math.floor(time / 60%60)<10?"0"+Math.floor(time / 60%60):String(Math.floor(time / 60%60));
+        const seconds = Math.floor(time % 60)<10?"0"+Math.floor(time % 60):String(Math.floor(time % 60));
+
+        return hours==="00"?minutes+":"+seconds:hours+":"+minutes+":"+seconds
     };
     const togglePlayPause = () => {
         if (!videoRef.current) return;
         if (videoRef.current.paused || videoRef.current.ended) {
             videoRef.current.play().then();
+            resetTimer();
         } else {
             videoRef.current.pause();
         }
@@ -90,7 +93,7 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src ,prepare}) => {
         setVolume(Number(event.target.value));
     };
     const resetTimer = () => {
-        setShowControlBar(true)
+        setShowControlBar(true);
         if (timeoutId) clearTimeout(timeoutId);
         const id = setTimeout(() => {
             if (videoRef===undefined || videoRef.current?.paused || videoRef.current?.ended){
@@ -139,10 +142,13 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src ,prepare}) => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (videoRef.current) {
                 if (event.key === "ArrowRight") {
+                    resetTimer();
                     handleFastForward();
                 } else if (event.key === "ArrowLeft") {
+                    resetTimer();
                     handleRewind();
                 } else if (event.code === 'Space' ) {
+                    resetTimer();
                     event.preventDefault();
                     togglePlayPause();
                 }
@@ -164,7 +170,7 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src ,prepare}) => {
             document.removeEventListener('keydown', handleKeyDown);
             video!.removeEventListener('timeupdate', handleTimeUpdate);
         };
-    }, [src,prepare]);
+    }, [src, prepare]);
 
     return (
         <div ref={containerRef} className={"relative w-full min-h-3.5 items-center content-center"} onMouseMove={resetTimer}>
@@ -216,18 +222,18 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src ,prepare}) => {
                                 setShowSpeedControl(false);
                                 setShowSetting(!showSetting);
                             }}>
-                                <Setting className={"w-5 h-5"}></Setting>
+                                <Setting style={{ transform: (showSetting || showSpeedControl)?"rotate(90deg)":"none" }} className={"transition-all duration-500 ease-in-out w-5 h-5"}></Setting>
                             </button>
                             {showSetting && (
                                 <div className={"absolute bottom-10 bg-normal-color rounded p-1 bg-opacity-80 right-10 pl-2 pr-2"}>
                                     {showSpeedControl?
                                         <div className={"relative flex flex-col items-start text-reverse-color text-sm pl-2 pr-2"}>
-                                            <button className={"w-full text-center mt-1"} onClick={()=>{controlSpeed(0.5);}}>0.5</button>
-                                            <button className={"w-full text-center mt-1"} onClick={()=>{controlSpeed(0.75);}}>0.75</button>
-                                            <button className={"w-full text-center mt-1"} onClick={()=>{controlSpeed(1);}}>正常</button>
-                                            <button className={"w-full text-center mt-1"} onClick={()=>{controlSpeed(1.25);}}>1.25</button>
-                                            <button className={"w-full text-center mt-1"} onClick={()=>{controlSpeed(1.5);}}>1.5</button>
-                                            <button className={"w-full text-center mt-1 mb-1"} onClick={()=>{controlSpeed(2);}}>2</button>
+                                            <button className={"w-full text-center mt-2"} onClick={()=>{controlSpeed(0.5);}}>0.5</button>
+                                            <button className={"w-full text-center mt-2"} onClick={()=>{controlSpeed(0.75);}}>0.75</button>
+                                            <button className={"w-full text-center mt-2"} onClick={()=>{controlSpeed(1);}}>正常</button>
+                                            <button className={"w-full text-center mt-2"} onClick={()=>{controlSpeed(1.25);}}>1.25</button>
+                                            <button className={"w-full text-center mt-2"} onClick={()=>{controlSpeed(1.5);}}>1.5</button>
+                                            <button className={"w-full text-center mt-2 mb-2"} onClick={()=>{controlSpeed(2);}}>2</button>
                                         </div>
                                         :
                                         <div className={"relative flex flex-col items-start text-reverse-color text-sm w-32"}>
