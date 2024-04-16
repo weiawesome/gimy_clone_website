@@ -15,9 +15,9 @@ interface FilmCardProps{
 const FilmCard:React.FC<FilmCardProps>=({id,resource,state,title,actors})=>{
     const [loadError,setLoadError]=useState(false);
     return(
-        <div className={"flex flex-1 p-1 flex-col justify-start"}>
-            <Link className={"relative m-1 group h-64 items-center"} aria-label={title} href={"/resource/"+id}>
-                <Image width={200} height={250} src={loadError?"/icon.png":resource} alt={"image"} className={"bg-reverse-color shadow-lg rounded-lg w-full h-full"} onError={()=>{setLoadError(true)}}></Image>
+        <div className={"flex flex-1 flex-col justify-start"}>
+            <Link className={"relative m-1 group items-center"} aria-label={title} href={"/resource/"+id}>
+                <Image width={200} height={250} src={loadError?"/icon.png":resource} alt={"image"} className={"bg-reverse-color shadow-lg rounded-lg w-full aspect-2/3"} onError={()=>{setLoadError(true)}}></Image>
                 <div className="absolute bottom-0 right-0 text-reverse-color p-1 text-sm">
                     {state}
                 </div>
