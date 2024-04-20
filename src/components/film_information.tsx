@@ -15,10 +15,10 @@ const FilmInformation:React.FC<FilmInformationProps>=({filmInformation})=>{
         setBgLoadError(false)
     }, [filmInformation]);
     return(
-        <div className={"p-3 flex flex-row w-full h-56"}>
+        <div className={"p-3 flex flex-row w-full mb-3"}>
             <Image alt={"image"} width={200} height={250} className={"lg:hidden filter -z-50 opacity-85 absolute blur drop-shadow-lg w-full h-52 object-cover object-center"} src={bgLoadError?"/icon.png":filmInformation?.resource} onError={()=>{setBgLoadError(true)}}/>
-            <div className={"h-full flex flex-col justify-center"}>
-                <Image alt={"image"} width={200} height={250} className={"aspect-2/3 shadow-lg rounded-lg overflow-hidden lg:w-auto"} src={loadError?"/icon.png":filmInformation?.resource} onError={()=>{setLoadError(true)}}/>
+            <div className={"h-52 lg:h-60 flex flex-col justify-center aspect-4/5"}>
+                <Image alt={"image"} width={200} height={250} className={"aspect-4/5 h-full shadow-lg rounded-lg overflow-hidden lg:w-auto"} src={loadError?"/icon.png":filmInformation?.resource} onError={()=>{setLoadError(true)}}/>
             </div>
             <div className={"flex flex-col justify-start ml-3 truncate lg:hidden"}>
                 <p className={"font-bold text-normal-color text-lg"}>{filmInformation?.title}</p>
@@ -57,7 +57,7 @@ const FilmInformation:React.FC<FilmInformationProps>=({filmInformation})=>{
                             <Link href={GetTypeRouteFormCategory(filmInformation?.category)+"?category="+filmInformation?.category} className={"text-normal-color hover:text-primary-color"}>{FormatCategory(filmInformation?.category)}</Link>
                         </div>
                     </div>
-                    <div className={"flex flex-row w-2/3 mt-2.5"}>
+                    <div className={"truncate flex flex-row w-2/3 mt-2.5"}>
                         <p className={"text-plain-color"}>主演&nbsp;:&nbsp;</p>
                         {filmInformation?.actors.map((item,index)=>{
                             return (
