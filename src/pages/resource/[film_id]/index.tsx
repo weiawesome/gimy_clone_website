@@ -45,11 +45,11 @@ const FilmInformationPage:React.FC=()=>{
                         <p className={"text-normal-color font-bold text-md"}>劇情介紹</p>
                         <p className={"text-sm text-normal-color"}>{filmInformation?.introduction}</p>
                     </div>
-                    <div className={"mt-5 w-full"}>
+                    <div className={"mt-5 w-full h-auto"}>
                         <Sub_title title={"熱播"+FormatCategory(filmInformation?.category)}></Sub_title>
                         <FilmScrollList query_mode={QueryMode.CATEGORY} value={filmInformation?.category}></FilmScrollList>
                     </div>
-                    <div className={"mt-5 h-auto"}>
+                    <div className={"mt-5 w-full h-auto"}>
                         <Sub_title title={"熱門推薦"}></Sub_title>
                         <FilmScrollList query_mode={QueryMode.RECOMMEND} value={""}></FilmScrollList>
                     </div>
