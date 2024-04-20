@@ -24,8 +24,10 @@ const FilmScrollList:React.FC<FilmScrollListProps>=({query_mode,value})=>{
         <div className={"w-full h-auto overflow-y-hidden flex overflow-x-scroll flex-row"}>
             {films?.films.map((item,index)=>{
                 return (
-                    <div className={"max-w-52 min-w-48 h-auto"} key={index}>
-                        <FilmCard id={item.id} resource={item.resource} state={item.state} title={item.title} actors={item.actors}></FilmCard>
+                    <div className={"max-w-52 min-w-40 h-auto"} key={index}>
+                        <div className={"mr-5"}>
+                            <FilmCard id={item.id} resource={item.resource} state={item.state} title={item.title} actors={item.actors}></FilmCard>
+                        </div>
                     </div>
                 )
             })}
