@@ -11,7 +11,7 @@ import RightArrow from "@/svgs/right_arrow_black.svg";
 import {GetRecommendFilms} from "@/service/get_recommend_films";
 import {HomeFilmListProps, TypeFilmList} from "@/data/utils";
 import {GetPopularTypeFilms} from "@/service/get_popular_films";
-import {GetServerSideProps, GetStaticProps} from 'next';
+import {GetServerSideProps} from 'next';
 export const getServerSideProps: GetServerSideProps = async () => {
     const  homeList= await GetRecommendFilms()
     if (!homeList) {
