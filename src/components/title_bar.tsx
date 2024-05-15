@@ -16,7 +16,7 @@ const TitleBar:React.FC<TitleBarProps>=({index})=>{
     const [searchState,setSearchState]=useState(false);
     const router=useRouter()
     const search=()=>{
-        router.push("/resource/search/content?content="+searchTerm)
+        router.push("/resource/search?content="+searchTerm)
     }
     const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
