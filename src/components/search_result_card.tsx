@@ -22,7 +22,7 @@ interface SearchResultCardProps{
 const SearchResultCard:React.FC<SearchResultCardProps>=({id,resource,title,state,category,actors,directors,location,language,releaseYear,updateTime,introduction})=>{
     const [loadError,setLoadError]=useState(false);
     return(
-        <div className={"flex flex-1 p-1 justify-start hover:bg-normal-color hover:bg-opacity-10"}>
+        <div className={"flex flex-1 p-1 justify-start hover:bg-normal-color hover:bg-opacity-10 rounded-lg"}>
             <div className={"w-full relative flex flex-row m-1 group"}>
                 <Link href={"/resource/"+id} className={"w-1/4"}>
                     <Image width={200} height={250} src={loadError?"/icon.png":resource} onError={()=>{setLoadError(true)}} alt={"image"} className={"shadow-lg bg-white rounded-lg w-full h-full"}></Image>
@@ -47,7 +47,7 @@ const SearchResultCard:React.FC<SearchResultCardProps>=({id,resource,title,state
                         <p className={"text-plain-color text-md hidden lg:block"}>主演&nbsp;:&nbsp;</p>
                         <div className={"flex flex-row truncate overflow-ellipsis"}>
                             {actors.map((item,index)=>{
-                                return <Link href={"/resource/search/celebrity"+"?"+"content="+item} key={index} className={"mr-3 text-md text-normal-color truncate hover:text-primary-color"}>{item}</Link>
+                                return <Link href={"/resource/search?is_celebrity=true"+"&"+"content="+item} key={index} className={"mr-3 text-md text-normal-color truncate hover:text-primary-color"}>{item}</Link>
                             })}
                         </div>
                     </div>
@@ -56,7 +56,7 @@ const SearchResultCard:React.FC<SearchResultCardProps>=({id,resource,title,state
                             <p className={"text-plain-color text-md"}>導演&nbsp;:&nbsp;</p>
                             <div className={"flex flex-row truncate overflow-ellipsis"}>
                                 {directors.map((item,index)=>{
-                                    return <Link href={"/resource/search/celebrity"+"?"+"content="+item} key={index} className={"text-md text-normal-color truncate hover:text-primary-color"}>{item}</Link>
+                                    return <Link href={"/resource/search?is_celebrity=true"+"&"+"content="+item} key={index} className={"text-md text-normal-color truncate hover:text-primary-color"}>{item}</Link>
                                 })}
                             </div>
                         </div>
@@ -80,8 +80,8 @@ const SearchResultCard:React.FC<SearchResultCardProps>=({id,resource,title,state
                         <p className={"text-md text-normal-color"}>{ConvertUTCDateToLocalDate(updateTime)}</p>
                     </div>
                     <div className={"lg:flex flex-row p-2 hidden"}>
-                        <p className={"text-plain-color text-md"}>詳細介紹&nbsp;:&nbsp;</p>
-                        <p className={"text-plain-color text-md truncate"}>{introduction}</p>
+                        <p className={"text-plain-color text-md whitespace-nowrap"}>詳細介紹&nbsp;:&nbsp;</p>
+                        <p className={"text-plain-color text-md break-all"}>{introduction}</p>
                     </div>
                 </div>
             </div>
