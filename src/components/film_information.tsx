@@ -5,28 +5,37 @@ import Link from "next/link";
 import Image from 'next/image';
 
 interface FilmInformationProps{
+    film_id:string
     filmInformation:ResponseFilmInformation
+    filmRoutesInformation:ResponseFilmRoutesInformation
 }
-const FilmInformation:React.FC<FilmInformationProps>=({filmInformation})=>{
+const FilmInformation:React.FC<FilmInformationProps>=({film_id,filmInformation,filmRoutesInformation})=>{
     const [loadError,setLoadError]=useState(false)
     const [bgLoadError,setBgLoadError]=useState(false)
+    const [resourceUrl,setResourceUrl]=useState("/resource/"+film_id)
     useEffect(() => {
         setLoadError(false)
         setBgLoadError(false)
     }, [filmInformation]);
+    useEffect(() => {
+        if (filmRoutesInformation.film_routes.length!==0 && filmRoutesInformation.film_routes[0].episodes.length!==0){
+            setResourceUrl("/resource/"+film_id+"/"+filmRoutesInformation.film_routes[0].route+"?"+"episode="+filmRoutesInformation.film_routes[0].episodes[0])
+        } else{
+            setResourceUrl("/resource/"+film_id)
+        }
+    }, [filmRoutesInformation, film_id]);
     return(
         <div className={"flex flex-row w-full mb-5 align-middle object-center items-center"}>
             <Image alt={"image"} width={200} height={250} className={"lg:hidden filter -z-50 opacity-85 absolute blur drop-shadow-lg w-full h-52 object-cover object-center"} src={bgLoadError?"/icon.png":filmInformation?.resource} onError={()=>{setBgLoadError(true)}}/>
-
-            <div className={"h-48 lg:h-60 flex flex-col justify-center aspect-4/5 p-1"}>
+            <Link href={resourceUrl} className={"h-48 lg:h-60 flex flex-col justify-center aspect-4/5 p-1"}>
                 <Image alt={"image"} width={200} height={250} className={"aspect-4/5 h-full shadow-lg rounded-lg overflow-hidden lg:w-auto"} src={loadError?"/icon.png":filmInformation?.resource} onError={()=>{setLoadError(true)}}/>
-            </div>
+            </Link>
             <div className={"flex flex-col justify-start ml-3 truncate lg:hidden p-1"}>
                 <p className={"font-bold text-normal-color text-lg"}>{filmInformation?.title}</p>
                 <div className={"mt-2 flex flex-row justify-start"}>
                     {filmInformation!==undefined && filmInformation?.actors.map((item,index)=>{
                         return(
-                            <Link href={"/resource/search/celebrity?content="+item} key={index} className={"mr-2 text-normal-color hover:text-primary-color text-md hover:font-bold"}>{item}</Link>
+                            <Link href={"/resource/search?is_celebrity=true&content="+item} key={index} className={"mr-2 text-normal-color hover:text-primary-color text-md hover:font-bold"}>{item}</Link>
                         )
                     })}
                 </div>
@@ -37,7 +46,7 @@ const FilmInformation:React.FC<FilmInformationProps>=({filmInformation})=>{
                     <p className={"ml-2 mr-2"}>/</p>
                     {filmInformation?.directors.map((item,index)=>{
                         return (
-                            <Link href={"/resource/search/celebrity?content="+item} key={index} className={"mr-2 text-normal-color hover:text-primary-color text-md hover:font-bold"}>{item}</Link>
+                            <Link href={"/resource/search?is_celebrity=true&content="+item} key={index} className={"mr-2 text-normal-color hover:text-primary-color text-md hover:font-bold"}>{item}</Link>
                         )
                     })}
                 </div>
@@ -62,7 +71,7 @@ const FilmInformation:React.FC<FilmInformationProps>=({filmInformation})=>{
                         <p className={"text-plain-color"}>主演&nbsp;:&nbsp;</p>
                         {filmInformation?.actors.map((item,index)=>{
                             return (
-                                <Link href={"/resource/search/celebrity?content="+item} className={"mr-2 text-normal-color hover:text-primary-color"} key={index}>{item}</Link>
+                                <Link href={"/resource/search?is_celebrity=true&content="+item} className={"mr-2 text-normal-color hover:text-primary-color"} key={index}>{item}</Link>
                             )
                         })}
                     </div>
@@ -71,7 +80,7 @@ const FilmInformation:React.FC<FilmInformationProps>=({filmInformation})=>{
                             <p className={"text-plain-color"}>導演&nbsp;:&nbsp;</p>
                             {filmInformation?.directors.map((item,index)=>{
                                 return (
-                                    <Link href={"/resource/search/celebrity?content="+item} key={index} className={"mr-2 text-normal-color hover:text-primary-color"}>{item}</Link>
+                                    <Link href={"/resource/search?is_celebrity=true&content="+item} key={index} className={"mr-2 text-normal-color hover:text-primary-color"}>{item}</Link>
                                 )
                             })}
                         </div>

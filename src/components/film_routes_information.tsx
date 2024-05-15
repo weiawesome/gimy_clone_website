@@ -6,16 +6,12 @@ import "@/app/globals.css"
 
 interface FilmRoutesInformationProps{
     film_id:string
+    information:ResponseFilmRoutesInformation
     chose_state:boolean
     chosen_film_route:string
     chosen_episode:string
 }
-const FilmRoutesInformation:React.FC<FilmRoutesInformationProps>=({film_id,chose_state,chosen_film_route,chosen_episode})=>{
-    const [information,setInformation]=useState<ResponseFilmRoutesInformation>()
-    useEffect(()=>{
-            GetFilmRoutesInformation(String(film_id)).then(r => setInformation(r!))
-        }
-    ,[film_id])
+const FilmRoutesInformation:React.FC<FilmRoutesInformationProps>=({film_id,information,chose_state,chosen_film_route,chosen_episode})=>{
     return (
         <div className={"pl-2 pr-2"}>
             {information!==undefined && information.film_routes.map((item, index)=>{

@@ -21,7 +21,7 @@ const FilmCard:React.FC<FilmCardProps>=({id,resource,state,title,actors})=>{
                 <div className="absolute bottom-0 right-0 text-reverse-color p-1 text-sm">
                     {state}
                 </div>
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 flex items-center justify-center transition-opacity duration-300 opacity-0 group-hover:opacity-100">
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 flex items-center justify-center transition-opacity duration-300 opacity-0 group-hover:opacity-100 rounded-lg">
                     <span className="w-10 h-10 flex items-center justify-center">
                         <PlaySvg className="w-full h-full" />
                     </span>
