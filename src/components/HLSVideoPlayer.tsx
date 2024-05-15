@@ -14,10 +14,9 @@ import RightArrow from "@/svgs/right_arrow.svg"
 import "@/app/globals.css"
 interface HLSVideoPlayerProps {
     src: string;
-    prepare:boolean
 }
 
-const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src ,prepare}) => {
+const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src}) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const [currentTime, setCurrentTime] = useState(0);
@@ -123,9 +122,6 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src ,prepare}) => {
         };
     }, [timeoutId]);
     useEffect(() => {
-        if (!prepare){
-            return
-        }
         if (Hls.isSupported() && videoRef.current) {
             const hls = new Hls();
             hls.loadSource(src);
@@ -170,7 +166,7 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src ,prepare}) => {
             document.removeEventListener('keydown', handleKeyDown);
             video!.removeEventListener('timeupdate', handleTimeUpdate);
         };
-    }, [src, prepare]);
+    }, [src]);
 
     return (
         <div ref={containerRef} className={"relative w-full min-h-3.5 items-center content-center"} onMouseMove={resetTimer}>
