@@ -148,28 +148,23 @@ const MovieSciFi:Category= {
     value: "科幻片",
         QUERY_CATEGORY:"MOVIE_SCI_FI"
 }
-const MovieComedy:Category=
-{
+const MovieComedy:Category= {
     value: "喜劇片",
         QUERY_CATEGORY:"MOVIE_COMEDY"
 }
-const MovieHorror:Category=
-{
+const MovieHorror:Category= {
     value: "恐怖片",
         QUERY_CATEGORY:"MOVIE_HORROR"
 }
-const MovieRomance:Category=
-{
+const MovieRomance:Category= {
     value: "愛情片",
         QUERY_CATEGORY:"MOVIE_ROMANCE"
 }
-const MovieWar:Category=
-{
+const MovieWar:Category= {
     value: "戰爭片",
         QUERY_CATEGORY:"MOVIE_WAR"
 }
-const MovieAnimated:Category=
-{
+const MovieAnimated:Category= {
     value: "動畫電影",
         QUERY_CATEGORY:"MOVIE_ANIMATED"
 }
