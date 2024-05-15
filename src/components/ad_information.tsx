@@ -11,19 +11,25 @@ interface AdInformationProps{
 
 const AdInformation:React.FC<AdInformationProps>=({adType})=>{
     const [source,setSource]=useState("")
+    const [loadError,setLoadError]=useState(false)
+
     useEffect(() => {
+        setLoadError(false);
         GetAd(adType).then((r)=>setSource(r!.URL))
     }, [adType]);
+    if (loadError){
+        return
+    }
     if (adType===AdType.WEB_BAR){
         return(
             <div className={"mt-3 mb-3 w-full h-24 lg:h-56 flex items-center justify-center overflow-hidden"}>
-                <Image alt={"ad"} width={750} height={150} src={source} className={"w-full"}></Image>
+                <Image alt={"ad"} width={750} height={150} src={source} className={"w-full"} onError={()=>{setLoadError(true)}}></Image>
             </div>
         )
     }
     return (
         <div className={"mt-3 mb-3 flex items-center justify-center"}>
-            <Image alt={"ad"} width={300} height={300} src={source}/>
+            <Image alt={"ad"} width={300} height={300} src={source} onError={()=>{setLoadError(true)}}/>
         </div>
     )
 }
