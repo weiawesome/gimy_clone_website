@@ -1,9 +1,6 @@
-import React, {useEffect, useState} from "react";
-import {GetPopularCategoryFilms, GetPopularTypeFilms} from "@/service/get_popular_films";
+import React from "react";
 import FilmCard from "@/components/film_card";
-import {QueryMode} from "@/data/category"
 import "@/app/globals.css"
-import {GetRecommendFilms} from "@/service/get_recommend_films";
 export interface FilmListProps{
     list:ResponseFilmList
 }

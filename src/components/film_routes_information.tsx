@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import Sub_title from "@/components/sub_title";
 import Episode from "@/components/episode";
-import {GetFilmRoutesInformation} from "@/service/get_film_information";
 import "@/app/globals.css"
 
 interface FilmRoutesInformationProps{
