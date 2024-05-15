@@ -3,7 +3,7 @@ import "@/app/globals.css"
 import TitleBar from "@/components/title_bar";
 import SubTitle from "@/components/sub_title";
 import {AnimateTypeInformation} from "@/data/type"
-import {AllCategory, AnimateCategory, QueryMode} from "@/data/category"
+import {AllCategory,  AnimateCategory} from "@/data/category"
 import ScrollToTopButton from "@/components/scroll_to_top_button";
 import FilmList from "@/components/film_list";
 import "@/app/globals.css"
@@ -17,7 +17,40 @@ import {useRouter} from "next/router";
 import FilterBar from "@/components/filter_bar";
 import {AllLocation, AnimateLocation} from "@/data/location";
 import Head from "next/head";
-const AnimatePage:React.FC=()=>{
+import {GetServerSideProps} from 'next';
+import {GetPopularCategoryFilms, GetPopularTypeFilms} from "@/service/get_popular_films";
+import {AllFilmListProps, CategoryFilmList } from "@/data/utils";
+
+
+export const getServerSideProps: GetServerSideProps = async () => {
+    const  typeList= await GetPopularTypeFilms(AnimateTypeInformation.QUERY_TYPE)
+    if (!typeList) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
+    }
+    let categoryList:CategoryFilmList[]=[]
+    for (const item of AnimateCategory) {
+        const list = await GetPopularCategoryFilms(item.QUERY_CATEGORY)
+        if (!list) {
+            return {
+                redirect: {
+                    destination: '/',
+                        permanent
+                :
+                    false,
+                }
+            ,
+            }
+        }
+        categoryList.push({Category:item,FilmList:list})
+    }
+    return {props: {typeList,categoryList}};
+};
+const AnimatePage:React.FC<AllFilmListProps>=({typeList,categoryList})=>{
     const router = useRouter();
     const { category,location,releaseYear,page } = router.query;
     const [orderType,setOrderType]=useState(OrderTypeUpdateTime.QUERY_ORDER_TYPE)
@@ -30,23 +63,33 @@ const AnimatePage:React.FC=()=>{
             <ScrollToTopButton></ScrollToTopButton>
             <FilterBar base_url={AnimateTypeInformation.route} category={AnimateCategory} chosen_category={category===undefined?AllCategory.QUERY_CATEGORY:String(category)} location={AnimateLocation} chosen_location={location===undefined?AllLocation.QUERY_LOCATION:String(location)} releaseYear={releaseYear===undefined?"":String(releaseYear)}></FilterBar>
             <SubTitle title={"今日熱播"}></SubTitle>
-            <FilmList query_mode={QueryMode.TYPE} value={AnimateTypeInformation.QUERY_TYPE}></FilmList>
+            {category===undefined ?
+                <FilmList list={typeList}></FilmList>:
+                categoryList.map((item,index)=>{
+                    if (item.Category.QUERY_CATEGORY===category){
+                        return(<FilmList list={item.FilmList} key={index}/>)
+                    } else{
+                        return
+                    }
+                })
+            }
+
             { category===undefined && location===undefined && releaseYear===undefined &&(
                 <div className={"mt-2 mb-2"}>
-                    {AnimateCategory.map((item,index)=>{
+                    {categoryList.map((item: { Category: { value: string; QUERY_CATEGORY: string; }; FilmList: ResponseFilmList; }, index: React.Key | null | undefined)=>{
                         if (index===0){
                             return
                         }
                         return (
                             <div key={index}>
                                 <div className={"w-full flex justify-between items-center"}>
-                                    <Sub_title title={item.value}></Sub_title>
-                                    <Link href={AnimateTypeInformation.route+"?category="+item.QUERY_CATEGORY} className={"flex items-center text-sm hover:text-primary-color text-plain-color"}>
+                                    <Sub_title title={item.Category.value}></Sub_title>
+                                    <Link href={AnimateTypeInformation.route+"?category="+item.Category.QUERY_CATEGORY} className={"flex items-center text-sm hover:text-primary-color text-plain-color"}>
                                         <p className={"pr-1"}>更多</p>
                                         <RightArrow className={"h-5 w-5"}></RightArrow>
                                     </Link>
                                 </div>
-                                <FilmList query_mode={QueryMode.CATEGORY} value={item.QUERY_CATEGORY}></FilmList>
+                                <FilmList list={item.FilmList}></FilmList>
                             </div>
                         );
                     })}
@@ -74,5 +117,4 @@ const AnimatePage:React.FC=()=>{
         </main>
     )
 }
-
 export default AnimatePage

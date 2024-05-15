@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "@/app/globals.css"
 import TitleBar from "@/components/title_bar";
 import {VarietyShowsTypeInformation} from "@/data/type"
-import {AllCategory, QueryMode, VarietyShowsCategory} from "@/data/category";
+import {AllCategory, VarietyShowsCategory} from "@/data/category";
 import Sub_title from "@/components/sub_title";
 import ScrollToTopButton from "@/components/scroll_to_top_button";
 import FilmList from "@/components/film_list";
@@ -15,7 +15,39 @@ import Link from "next/link";
 import {AllLocation, VarietyShowsLocation} from "@/data/location";
 import FilterBar from "@/components/filter_bar";
 import Head from "next/head";
-const VarietyShowsPage:React.FC=()=>{
+import {GetServerSideProps} from "next";
+import {GetPopularCategoryFilms, GetPopularTypeFilms} from "@/service/get_popular_films";
+import {AllFilmListProps, CategoryFilmList} from "@/data/utils";
+
+export const getServerSideProps: GetServerSideProps = async () => {
+    const  typeList= await GetPopularTypeFilms(VarietyShowsTypeInformation.QUERY_TYPE)
+    if (!typeList) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
+    }
+    let categoryList:CategoryFilmList[]=[]
+    for (const item of VarietyShowsCategory) {
+        const list = await GetPopularCategoryFilms(item.QUERY_CATEGORY)
+        if (!list) {
+            return {
+                redirect: {
+                    destination: '/',
+                    permanent
+                        :
+                        false,
+                }
+                ,
+            }
+        }
+        categoryList.push({Category:item,FilmList:list})
+    }
+    return {props: {typeList,categoryList}};
+};
+const VarietyShowsPage:React.FC<AllFilmListProps>=({typeList,categoryList})=>{
     const router = useRouter();
     const { category,location,releaseYear,page } = router.query;
     const [orderType,setOrderType]=useState(OrderTypeUpdateTime.QUERY_ORDER_TYPE)
@@ -28,23 +60,32 @@ const VarietyShowsPage:React.FC=()=>{
             <ScrollToTopButton></ScrollToTopButton>
             <FilterBar base_url={VarietyShowsTypeInformation.route} category={VarietyShowsCategory} chosen_category={category===undefined?AllCategory.QUERY_CATEGORY:String(category)} location={VarietyShowsLocation} chosen_location={location===undefined?AllLocation.QUERY_LOCATION:String(location)} releaseYear={releaseYear===undefined?"":String(releaseYear)}></FilterBar>
             <Sub_title title={"今日熱播"}></Sub_title>
-            <FilmList query_mode={QueryMode.TYPE} value={VarietyShowsTypeInformation.QUERY_TYPE}></FilmList>
+            {category===undefined ?
+                <FilmList list={typeList}></FilmList>:
+                categoryList.map((item,index)=>{
+                    if (item.Category.QUERY_CATEGORY===category){
+                        return(<FilmList list={item.FilmList} key={index}/>)
+                    } else{
+                        return
+                    }
+                })
+            }
             { category===undefined && location===undefined && releaseYear===undefined &&(
                 <div className={"mt-2 mb-2"}>
-                    {VarietyShowsCategory.map((item,index)=>{
+                    {categoryList.map((item,index)=>{
                         if (index===0){
                             return
                         }
                         return (
                             <div key={index}>
                                 <div className={"w-full flex justify-between items-center"}>
-                                    <Sub_title title={item.value}></Sub_title>
-                                    <Link href={VarietyShowsTypeInformation.route+"?category="+item.QUERY_CATEGORY} className={"flex items-center text-sm hover:text-primary-color text-plain-color"}>
+                                    <Sub_title title={item.Category.value}></Sub_title>
+                                    <Link href={VarietyShowsTypeInformation.route+"?category="+item.Category.QUERY_CATEGORY} className={"flex items-center text-sm hover:text-primary-color text-plain-color"}>
                                         <p className={"pr-1"}>更多</p>
                                         <RightArrow className={"h-5 w-5"}></RightArrow>
                                     </Link>
                                 </div>
-                                <FilmList query_mode={QueryMode.CATEGORY} value={item.QUERY_CATEGORY}></FilmList>
+                                <FilmList list={item.FilmList}></FilmList>
                             </div>
                         );
                     })}
