@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import "@/app/globals.css"
-import {GetSearchFilms} from "@/service/get_search_films";
 import SearchResultCard from "@/components/search_result_card";
 import { ResponseFilmsSearch } from "@/model/repsonse/films_search";
 import Link from "next/link";
