@@ -21,3 +21,25 @@ main{
   @apply pl-3 pr-3
 }
 
+@keyframes wave {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-5rem) scale(1.5);
+  }
+}
+@keyframes scaleFade {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.animate-scale-fade {
+  animation: scaleFade 700ms forwards;
+}
