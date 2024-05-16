@@ -1,7 +1,7 @@
 import {config} from "@/service/config";
 
-export async function UploadToSearchEngine(film_id:string): Promise<void> {
-    const url=config.SERVICE_URL+config.ROUTE_UPLOAD_SEARCH_ENGINE+film_id
+export async function UploadToSearchEngine(service_url:string,film_id:string): Promise<void> {
+    const url=service_url+config.ROUTE_UPLOAD_SEARCH_ENGINE+film_id
 
     try {
         const response = await fetch(url, {

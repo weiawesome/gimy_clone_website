@@ -1,7 +1,7 @@
 import {config} from "@/service/config";
 
-export async function GetFilterFilms(film_type:string,film_category:string|string[]|undefined,location:string|string[]|undefined,releaseYear:string|string[]|undefined,orderType:string,page:number){
-    let url=config.SERVICE_URL+config.ROUTE_FILTER+film_type+"?"+"order_type="+orderType
+export async function GetFilterFilms(service_url:string,film_type:string,film_category:string|string[]|undefined,location:string|string[]|undefined,releaseYear:string|string[]|undefined,orderType:string,page:number){
+    let url=service_url+config.ROUTE_FILTER+film_type+"?"+"order_type="+orderType
     const offset=(page-1)*config.PAGE_SIZE
     const limit=config.PAGE_SIZE
 

@@ -1,7 +1,7 @@
 import {config} from "@/service/config";
 
-export async function DeleteFilmEpisode(route:string, id:string, episode:string, state:string): Promise<void> {
-    const url=config.SERVICE_URL+config.ROUTE_UPLOAD_FILM_RESOURCE+route+"/"+id+"/"+episode+"?"+"state="+state
+export async function DeleteFilmEpisode(service_url:string,route:string, id:string, episode:string, state:string): Promise<void> {
+    const url=service_url+config.ROUTE_UPLOAD_FILM_RESOURCE+route+"/"+id+"/"+episode+"?"+"state="+state
 
     try {
         const response = await fetch(url, {
@@ -16,8 +16,8 @@ export async function DeleteFilmEpisode(route:string, id:string, episode:string,
     }
 }
 
-export async function DeleteFilm(id:string): Promise<void> {
-    const url=config.SERVICE_URL+config.ROUTE_CREATE_FILM+"/"+id
+export async function DeleteFilm(service_url:string,id:string): Promise<void> {
+    const url=service_url+config.ROUTE_CREATE_FILM+"/"+id
 
     try {
         const response = await fetch(url, {

@@ -1,8 +1,8 @@
 import {config} from "@/service/config";
 import {AdType} from "@/model/repsonse/ad_information";
 
-export async function UploadAd(file: File, advertisementType: AdType, expiredTime: string): Promise<void> {
-    const url=config.SERVICE_URL+config.ROUTE_UPLOAD_AD
+export async function UploadAd(service_url:string,file: File, advertisementType: AdType, expiredTime: string): Promise<void> {
+    const url=service_url+config.ROUTE_UPLOAD_AD
     const formData = new FormData();
     formData.append("file", file);
     formData.append("advertisement_type", advertisementType);
