@@ -6,7 +6,7 @@ import {GetFilmInformation, GetFilmRoutesInformation} from "@/service/get_film_i
 import FilmRoutesInformation from "@/components/film_routes_information";
 import "@/app/globals.css"
 import Sub_title from "@/components/sub_title";
-import {AllCategory, CategoryMapping, QueryMode} from "@/data/category";
+import {AllCategory, CategoryMapping} from "@/data/category";
 import {FormatCategory, GetTypeRouteFormCategory, GetTypeValueFormCategory} from "@/service/utils";
 import FilmScrollList from "@/components/film_scroll_list";
 import Footer from "@/components/footer";
