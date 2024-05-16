@@ -9,8 +9,15 @@ import "@/app/globals.css";
 import 'react-toastify/dist/ReactToastify.css';
 import Head from "next/head";
 import {DeleteFilm, DeleteFilmEpisode} from "@/service/delete_resource";
+import {GetServerSideProps} from "next";
+import {config} from "@/service/config";
+import {ClientServiceProps} from "@/data/utils";
 
-const FilmDelete: React.FC = () => {
+export const getServerSideProps: GetServerSideProps = async () => {
+    const serviceUrl=config.API_SERVICE_URL;
+    return {props:{serviceUrl}};
+}
+const FilmDelete: React.FC<ClientServiceProps> = ({serviceUrl}) => {
     const idRef=useRef<HTMLInputElement|null>(null)
     const idEpisodeRef=useRef<HTMLInputElement|null>(null)
     const routeRef=useRef<HTMLInputElement|null>(null)
@@ -37,7 +44,7 @@ const FilmDelete: React.FC = () => {
         }
         setSubmitEnable(false)
         toast.promise(
-            DeleteFilmEpisode(routeRef.current!.value,idEpisodeRef.current!.value,episodeRef.current!.value,stateRef.current!.value),
+            DeleteFilmEpisode(serviceUrl,routeRef.current!.value,idEpisodeRef.current!.value,episodeRef.current!.value,stateRef.current!.value),
             {
                 pending: {
                     render() {
@@ -67,7 +74,7 @@ const FilmDelete: React.FC = () => {
         }
         setSubmitEnable(false)
         toast.promise(
-            DeleteFilm(idRef.current!.value),
+            DeleteFilm(serviceUrl,idRef.current!.value),
             {
                 pending: {
                     render() {
@@ -155,7 +162,6 @@ const FilmDelete: React.FC = () => {
                 :
                 <div className={"mt-3 text-3xl text-center font-bold"}>刪除中......</div>
             }
-
             <Footer></Footer>
         </main>
     );
