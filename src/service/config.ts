@@ -1,6 +1,8 @@
 const BASE_URL = process.env.API_URL || "http://localhost";
+const BASE_SERVICE_URL = process.env.SERVICE_URL || "http://localhost";
 export const config={
     "SERVICE_URL": BASE_URL+"/api/v1",
+    "API_SERVICE_URL": BASE_SERVICE_URL+"/api/v1",
     "ROUTE_POPULAR_TYPE":"/affair/popular/type/",
     "ROUTE_POPULAR_CATEGORY":"/affair/popular/category/",
     "ROUTE_INFORMATION":"/affair/film_information/",
