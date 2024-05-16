@@ -4,6 +4,7 @@ import FilmCard from "@/components/film_card";
 import {GetFilterFilms} from "@/service/get_filter_films";
 
 interface FilterContentProps{
+    service_url:string
     film_type:string
     category:string|string[]|undefined
     location:string|string[]|undefined
@@ -12,11 +13,11 @@ interface FilterContentProps{
     page:number
 }
 
-const FilterContent:React.FC<FilterContentProps>=({film_type,category,location,release_year,order_type,page})=>{
+const FilterContent:React.FC<FilterContentProps>=({service_url,film_type,category,location,release_year,order_type,page})=>{
     const [films,setFilms]=useState<ResponseFilmList>()
     useEffect(() => {
-        GetFilterFilms(film_type,category,location,release_year,order_type,page).then(r=>setFilms(r!))
-    }, [category, film_type, location, order_type, page, release_year]);
+        GetFilterFilms(service_url,film_type,category,location,release_year,order_type,page).then(r=>setFilms(r!))
+    }, [category, film_type, location, order_type, page, release_year, service_url]);
     return (
         <div className={"grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"}>
             {films?.films.map((item,index)=>{

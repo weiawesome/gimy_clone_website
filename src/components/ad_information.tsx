@@ -7,16 +7,17 @@ import Image from 'next/image';
 
 interface AdInformationProps{
     adType:AdType
+    service_url:string
 }
 
-const AdInformation:React.FC<AdInformationProps>=({adType})=>{
+const AdInformation:React.FC<AdInformationProps>=({adType,service_url})=>{
     const [source,setSource]=useState("")
     const [loadError,setLoadError]=useState(false)
 
     useEffect(() => {
         setLoadError(false);
-        GetAd(adType).then((r)=>setSource(r!.URL))
-    }, [adType]);
+        GetAd(adType,service_url).then((r)=>setSource(r!.URL))
+    }, [adType, service_url]);
     if (loadError){
         return
     }
