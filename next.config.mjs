@@ -12,7 +12,9 @@ const nextConfig = {
         API_URL: process.env.NEXT_PUBLIC_API_URL,
     },
     images: {
-        domains: [process.env.RESOURCE_DOMAIN || "localhost"],
+        remotePatterns: [
+            { hostname: process.env.RESOURCE_DOMAIN || "localhost" }
+        ]
     },
 };
 
