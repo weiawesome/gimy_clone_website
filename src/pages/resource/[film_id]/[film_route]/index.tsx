@@ -20,6 +20,7 @@ export interface FilmResourceInformationProps{
     film_id:string
     film_route:string
     episode:string
+    serviceUrl:string
     filmInformation:ResponseFilmInformation
     filmRoutesInformation:ResponseFilmRoutesInformation
 }
@@ -39,28 +40,29 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const filmInformation=await GetFilmInformation(film_id)
     const filmRoutesInformation=await GetFilmRoutesInformation(film_id)
-    return {props:{film_id,film_route,episode,filmInformation,filmRoutesInformation}};
+    const serviceUrl=config.API_SERVICE_URL;
+    return {props:{film_id,film_route,episode,serviceUrl,filmInformation,filmRoutesInformation}};
 };
 
-const FilmResourcePage:React.FC<FilmResourceInformationProps>=({film_id,film_route,episode,filmInformation,filmRoutesInformation})=>{
+const FilmResourcePage:React.FC<FilmResourceInformationProps>=({film_id,film_route,episode,serviceUrl,filmInformation,filmRoutesInformation})=>{
     return (
         <main>
             <Head>
-                <title>{filmInformation?.title}線上看 {episode} - Wei-Gimy 維劇迷</title>
+                <title>{filmInformation.title}線上看 {episode} - Wei-Gimy 維劇迷</title>
             </Head>
-            <TitleBar index={filmInformation===undefined ? CategoryMapping.ALL_CATEGORY.index:
-                filmInformation!.category in CategoryMapping?
+            <TitleBar index={
+                filmInformation.category in CategoryMapping?
                 // @ts-ignore
-                CategoryMapping[filmInformation!.category].index:CategoryMapping.ALL_CATEGORY.index
+                CategoryMapping[filmInformation.category].index:CategoryMapping.ALL_CATEGORY.index
             }></TitleBar>
             <ScrollToTopButton></ScrollToTopButton>
             <div className={"bg-center items-center"}>
-                <HLSVideoPlayer src={config.SERVICE_URL+config.ROUTE_MEDIA_LIST+film_route+"/"+film_id+"/"+episode}/>
+                <HLSVideoPlayer src={serviceUrl+config.ROUTE_MEDIA_LIST+film_route+"/"+film_id+"/"+episode}/>
                 <EditEpisodeButton film_id={film_id} film_route={film_route} episode={episode}></EditEpisodeButton>
             </div>
             <FilmFullInformation film_route={film_route} episode={episode} filmInformation={filmInformation}></FilmFullInformation>
-            <AdInformation adType={AdType.WEB_BAR}></AdInformation>
-            <FilmRoutesInformation chose_state={true} chosen_film_route={film_route} chosen_episode={String(episode)} film_id={film_id} information={filmRoutesInformation}></FilmRoutesInformation>
+            <AdInformation adType={AdType.WEB_BAR} service_url={serviceUrl}></AdInformation>
+            <FilmRoutesInformation chose_state={true} chosen_film_route={film_route} chosen_episode={episode} film_id={film_id} information={filmRoutesInformation}></FilmRoutesInformation>
             <Footer></Footer>
         </main>
     )
