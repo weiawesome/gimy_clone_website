@@ -20,6 +20,7 @@ import Head from "next/head";
 import {GetServerSideProps} from 'next';
 import {GetPopularCategoryFilms, GetPopularTypeFilms} from "@/service/get_popular_films";
 import {AllFilmListProps, CategoryFilmList } from "@/data/utils";
+import {config} from "@/service/config"
 
 
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -48,9 +49,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
         }
         categoryList.push({Category:item,FilmList:list})
     }
-    return {props: {typeList,categoryList}};
+    const serviceUrl=config.API_SERVICE_URL
+    return {props: {serviceUrl,typeList,categoryList}};
 };
-const AnimatePage:React.FC<AllFilmListProps>=({typeList,categoryList})=>{
+const AnimatePage:React.FC<AllFilmListProps>=({serviceUrl,typeList,categoryList})=>{
     const router = useRouter();
     const { category,location,releaseYear,page } = router.query;
     const [orderType,setOrderType]=useState(OrderTypeUpdateTime.QUERY_ORDER_TYPE)
@@ -110,7 +112,7 @@ const AnimatePage:React.FC<AllFilmListProps>=({typeList,categoryList})=>{
                             )
                         })}
                     </div>
-                    <FilterContent film_type={AnimateTypeInformation.QUERY_TYPE} category={category} location={location} release_year={releaseYear} order_type={orderType} page={page===undefined?1:Number(page)}></FilterContent>
+                    <FilterContent service_url={serviceUrl} film_type={AnimateTypeInformation.QUERY_TYPE} category={category} location={location} release_year={releaseYear} order_type={orderType} page={page===undefined?1:Number(page)}></FilterContent>
                 </div>
             )}
             <Footer></Footer>
