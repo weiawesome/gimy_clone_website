@@ -11,8 +11,16 @@ import {RequestCreateFilm} from "@/model/request/film_create";
 import {CreateFilm} from "@/service/create_film";
 import {UploadToSearchEngine} from "@/service/upload_to_search_engine";
 import Head from "next/head";
+import {GetServerSideProps} from "next";
+import {config} from "@/service/config";
+import {ClientServiceProps} from "@/data/utils";
 
-const CreateFilmMedia: React.FC = () => {
+export const getServerSideProps: GetServerSideProps = async () => {
+    const serviceUrl=config.API_SERVICE_URL;
+    return {props:{serviceUrl}};
+}
+
+const CreateFilmMedia: React.FC<ClientServiceProps> = ({serviceUrl}) => {
     const [chooseType,setChooseType]=useState<TypeInformation|undefined>(undefined)
     const titleRef=useRef<HTMLInputElement|null>(null)
     const categoryRef=useRef<HTMLSelectElement|null>(null)
@@ -29,7 +37,7 @@ const CreateFilmMedia: React.FC = () => {
 
     const uploadToSearchEngine=(film_id:string)=>{
         toast.promise(
-            UploadToSearchEngine(film_id),
+            UploadToSearchEngine(serviceUrl,film_id),
             {
                 pending: {
                     render() {
@@ -84,7 +92,7 @@ const CreateFilmMedia: React.FC = () => {
         }
         setSubmitEnable(false)
         toast.promise(
-            CreateFilm(Request),
+            CreateFilm(serviceUrl,Request),
             {
                 pending: {
                     render() {

@@ -9,8 +9,15 @@ import {UploadAd} from "@/service/upload_ad";
 import { ToastContainer, toast } from "react-toastify";
 import ScrollToTopButton from "@/components/scroll_to_top_button";
 import Head from "next/head";
+import {GetServerSideProps} from "next";
+import {config} from "@/service/config";
+import {ClientServiceProps} from "@/data/utils";
 
-const AdMedia: React.FC = () => {
+export const getServerSideProps: GetServerSideProps = async () => {
+    const serviceUrl=config.API_SERVICE_URL;
+    return {props:{serviceUrl}};
+}
+const AdMedia: React.FC <ClientServiceProps>= ({serviceUrl}) => {
     const [adType, setAdType] = useState<AdType>(AdType.UNKNOWN);
     const [file, setFile] = useState<File|null>(null);
     const [expiredTime,setExpiredTime]=useState("")
@@ -37,7 +44,7 @@ const AdMedia: React.FC = () => {
         }
         setSubmitEnable(false)
         toast.promise(
-            UploadAd(file, adType, expiredTime + ":00.000Z"),
+            UploadAd(serviceUrl,file, adType, expiredTime + ":00.000Z"),
             {
                 pending: {
                     render() {

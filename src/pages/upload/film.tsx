@@ -10,8 +10,16 @@ import 'react-toastify/dist/ReactToastify.css';
 import {UploadFilmResource, UploadImageResource} from "@/service/upload_resource";
 import {UploadToSearchEngine} from "@/service/upload_to_search_engine";
 import Head from "next/head";
+import {GetServerSideProps} from "next";
+import {config} from "@/service/config";
+import {ClientServiceProps} from "@/data/utils";
 
-const FilmMedia: React.FC = () => {
+export const getServerSideProps: GetServerSideProps = async () => {
+    const serviceUrl=config.API_SERVICE_URL;
+    return {props:{serviceUrl}};
+}
+
+const FilmMedia: React.FC <ClientServiceProps>= ({serviceUrl}) => {
     const [file, setFile] = useState<File|null>(null);
     const [imageFile, setImageFile] = useState<File|null>(null);
     const idRef=useRef<HTMLInputElement|null>(null)
@@ -29,7 +37,7 @@ const FilmMedia: React.FC = () => {
         }
         setSubmitEnable(false)
         toast.promise(
-            UploadToSearchEngine(idSearchEngineRef.current!.value),
+            UploadToSearchEngine(serviceUrl,idSearchEngineRef.current!.value),
             {
                 pending: {
                     render() {
@@ -76,7 +84,7 @@ const FilmMedia: React.FC = () => {
         }
         setSubmitEnable(false)
         toast.promise(
-            UploadFilmResource(routeRef.current!.value,idRef.current!.value,episodeRef.current!.value,stateRef.current!.value,file!),
+            UploadFilmResource(serviceUrl,routeRef.current!.value,idRef.current!.value,episodeRef.current!.value,stateRef.current!.value,file!),
             {
                 pending: {
                     render() {
@@ -111,7 +119,7 @@ const FilmMedia: React.FC = () => {
         }
         setSubmitEnable(false)
         toast.promise(
-            UploadImageResource(idImageRef.current!.value,imageFile!),
+            UploadImageResource(serviceUrl,idImageRef.current!.value,imageFile!),
             {
                 pending: {
                     render() {
