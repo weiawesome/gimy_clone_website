@@ -9,28 +9,29 @@ import Sub_title from "@/components/sub_title";
 import Image from 'next/image';
 
 interface RankingSideListProps{
+    service_url:string
     base_url:string
     category:string
 }
 
-const RankingSideList:React.FC<RankingSideListProps>=({base_url,category})=>{
+const RankingSideList:React.FC<RankingSideListProps>=({service_url,base_url,category})=>{
     const [filmRanked,setFilmRanked] =useState<ResponseFilmsRanked>()
     const [firstFilmInformation,setFirstFilmInformation]=useState<ResponseFilmInformation>()
     const [loadError,setLoadError]=useState(false)
     useEffect(() => {
-        GetRankedFilms(category).then((r)=>{
+        GetRankedFilms(service_url,category).then((r)=>{
             setFilmRanked(r!);
             GetFilmInformation(r!.ranked_films[0].id).then((fr)=>setFirstFilmInformation(fr!))
         })
 
-    }, [base_url,category]);
+    }, [base_url, category, service_url]);
     return (
         <div className={"flex flex-col pr-3 pb-3"}>
             <Sub_title title={FormatCategory(category)+"排行榜"}></Sub_title>
             {firstFilmInformation!==undefined &&(
                 <div className={"relative mt-2.5 flex justify-between truncate"}>
                     <p className={"absolute pl-2 pr-2 p-1 rounded-tl-lg text-sm bg-primary-color text-reverse-color z-30"}>{1}</p>
-                    <Link href={"resource/"+firstFilmInformation.id} className={"w-1/2 relative"}>
+                    <Link href={"/resource/"+firstFilmInformation.id} className={"w-1/2 relative"}>
                         <Image width={200} height={250} src={loadError?"/icon.png":firstFilmInformation.resource} alt={"image"} className={"bg-reverse-color shadow-lg rounded-lg w-full h-full"} onError={()=>{setLoadError(true)}}></Image>
                         <div className="absolute bottom-0 right-0 text-reverse-color p-1 text-sm">
                             {firstFilmInformation.state}

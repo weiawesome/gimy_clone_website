@@ -6,15 +6,16 @@ import {FormatCategory} from "@/service/utils";
 import Link from "next/link";
 
 interface RankingListProps{
+    service_url:string
     base_url:string
     category:string
 }
 
-const RankingList:React.FC<RankingListProps>=({base_url,category})=>{
+const RankingList:React.FC<RankingListProps>=({service_url,base_url,category})=>{
     const [filmRanked,setFilmRanked] =useState<ResponseFilmsRanked>()
     useEffect(() => {
-        GetRankedFilms(category).then((r)=>setFilmRanked(r!))
-    }, [base_url,category]);
+        GetRankedFilms(service_url,category).then((r)=>setFilmRanked(r!))
+    }, [base_url, category, service_url]);
     return (
         <div className={"flex flex-col pr-3 pb-3"}>
             <div className={"items-center flex flex-row justify-between"}>
