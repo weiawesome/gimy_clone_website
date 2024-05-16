@@ -1,4 +1,3 @@
-'use client';
 import React, {useEffect, useRef, useState} from "react";
 import Hls from "hls.js";
 import Play from "@/svgs/play.svg"
@@ -12,6 +11,8 @@ import UnChosen from "@/svgs/switch_left.svg"
 import Chosen from "@/svgs/switch_right.svg"
 import RightArrow from "@/svgs/right_arrow.svg"
 import "@/app/globals.css"
+import LoadingWave from "@/components/loading_wave";
+import LoadError from "@/components/load_error";
 interface HLSVideoPlayerProps {
     src: string;
 }
@@ -31,6 +32,10 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src}) => {
     const [showSpeedControl,setShowSpeedControl]=useState(false);
     const [timeoutId, setTimeoutId] = useState<number|null>(null);
     const [volume, setVolume] = useState<number>(1);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+    const [showIcon, setShowIcon] = useState(false);
+    const [forwardRewind,setForwardRewind] = useState<string|null>(null);
     const updateProgress = () => {
         const video = videoRef.current;
         if (video) {
@@ -81,12 +86,18 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src}) => {
         } else {
             videoRef.current.pause();
         }
+        setShowIcon(true);
+        setTimeout(() => setShowIcon(false), 700);
     };
     const handleFastForward = () => {
         if (videoRef.current) videoRef.current.currentTime += 10;
+        setForwardRewind("快進 10 秒")
+        setTimeout(() => setForwardRewind(null), 1000);
     };
     const handleRewind = () => {
         if (videoRef.current) videoRef.current.currentTime -= 10;
+        setForwardRewind("快退 10 秒")
+        setTimeout(() => setForwardRewind(null), 1000);
     };
     const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setVolume(Number(event.target.value));
@@ -127,12 +138,30 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src}) => {
             hls.loadSource(src);
             hls.attachMedia(videoRef.current);
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                videoRef.current?.play().then();
+                videoRef.current?.play().then(() => {setLoading(false);setError(false)}).catch((_) => setError(true));
+            });
+            hls.on(Hls.Events.ERROR, (event, data) => {
+                if (data.fatal) {
+                    switch (data.type) {
+                        case Hls.ErrorTypes.NETWORK_ERROR:
+                            console.log("Network Error:", data);
+                            setError(true);
+                            break;
+                        case Hls.ErrorTypes.MEDIA_ERROR:
+                            console.log("Media Error:", data);
+                            setError(true);
+                            break;
+                        default:
+                            setError(true);
+                            hls.destroy();
+                            break;
+                    }
+                }
             });
         } else if (videoRef.current && videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
             videoRef.current.src = src;
             videoRef.current.addEventListener('loadedmetadata', () => {
-                videoRef.current?.play().then();
+                videoRef.current?.play().then(() => {setLoading(false);setError(false)}).catch((_) => setError(true));
             });
         }
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -170,6 +199,24 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src}) => {
 
     return (
         <div ref={containerRef} className={"relative w-full min-h-3.5 items-center content-center"} onMouseMove={resetTimer}>
+            {loading && <LoadingWave/>}
+            {error && <LoadError/>}
+            {showIcon && (
+                <div className={`absolute inset-0 flex justify-center items-center transition-opacity duration-700 ${showIcon ? 'opacity-100' : 'opacity-0'}`}>
+                    <div className="text-white text-6xl animate-scale-fade">
+                        {videoRef===null || videoRef.current?.paused || videoRef.current?.ended ?
+                            <div className={"w-20 h-20 p-5 bg-normal-color bg-opacity-30 rounded-full"}>
+                                <Pause className={"w-full h-full"}/>
+                            </div>
+                            :
+                            <div className={"w-20 h-20 p-5 bg-normal-color bg-opacity-30 rounded-full"}>
+                                <Play className={"w-full h-full"}/>
+                            </div>
+                        }
+                    </div>
+                </div>
+            )}
+            {forwardRewind && <div className="absolute bg-plain-color bg-opacity-20 text-reverse-color font-bold rounded p-1.5 text-sm text-center"  style={{left: `0.5rem`, bottom: `3rem`}}>{forwardRewind}</div>}
             <video ref={videoRef} className={"w-full min-h-3.5"} onClick={()=> {
                 if (showSetting) {
                     setShowSpeedControl(false);
@@ -177,7 +224,7 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src}) => {
                 } else {
                     togglePlayPause();
                 }
-            }}></video>
+            }}/>
             <div style={{height:showControlBar?"auto":"0",overflow:showControlBar?"initial":"hidden"}} className={"absolute transition-all duration-500 bottom-0 left-0 w-full bg-normal-color bg-opacity-50"}>
                 <div className="relative pb-1">
                     {hoverTime && <div className="absolute bg-plain-color bg-opacity-20 text-reverse-color font-bold rounded p-1.5 text-sm text-center"  style={{ width:"50px",left: `${hoverPosition.x-25}px`, bottom: `40px` }}>{hoverTime}</div>}
@@ -246,7 +293,6 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src}) => {
                                 </div>
                             )}
                             <button onClick={()=>{
-                                // videoRef.current!.requestFullscreen()
                                 if (document.fullscreenElement) {
                                     document.exitFullscreen().then();
                                 } else if (containerRef.current) {
@@ -257,7 +303,6 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src}) => {
                             </button>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
