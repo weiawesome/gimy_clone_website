@@ -10,6 +10,7 @@ export interface TypeFilmList{
     FilmList:ResponseFilmList
 }
 export interface AllFilmListProps {
+    serviceUrl:string
     typeList:ResponseFilmList
     categoryList:CategoryFilmList[]
 }
@@ -17,4 +18,8 @@ export interface HomeFilmListProps {
     homeList:ResponseFilmList
     todayList:ResponseFilmList
     typeList:TypeFilmList[]
+}
+
+export interface ClientServiceProps{
+    serviceUrl:string
 }
