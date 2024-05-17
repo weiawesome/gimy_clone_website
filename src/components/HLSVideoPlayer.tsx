@@ -36,6 +36,7 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src}) => {
     const [error, setError] = useState(false);
     const [showIcon, setShowIcon] = useState(false);
     const [forwardRewind,setForwardRewind] = useState<string|null>(null);
+    const [forwardRewindId, setForwardRewindId] = useState<number|null>(null);
     const updateProgress = () => {
         const video = videoRef.current;
         if (video) {
@@ -78,69 +79,44 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src}) => {
 
         return hours==="00"?minutes+":"+seconds:hours+":"+minutes+":"+seconds
     };
+    const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setVolume(Number(event.target.value));
+    };
     const togglePlayPause = () => {
         if (!videoRef.current) return;
         if (videoRef.current.paused || videoRef.current.ended) {
-            videoRef.current.play().then();
-            resetTimer();
+            videoRef.current.play().then(() => {setLoading(false);setError(false)}).catch((_) => setError(true));
         } else {
             videoRef.current.pause();
         }
         setShowIcon(true);
         setTimeout(() => setShowIcon(false), 700);
     };
-    const handleFastForward = () => {
-        if (videoRef.current) videoRef.current.currentTime += 10;
-        setForwardRewind("快進 10 秒")
-        setTimeout(() => setForwardRewind(null), 1000);
-    };
-    const handleRewind = () => {
-        if (videoRef.current) videoRef.current.currentTime -= 10;
-        setForwardRewind("快退 10 秒")
-        setTimeout(() => setForwardRewind(null), 1000);
-    };
-    const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setVolume(Number(event.target.value));
-    };
-    const resetTimer = () => {
-        setShowControlBar(true);
-        if (timeoutId) clearTimeout(timeoutId);
-        const id = setTimeout(() => {
-            if (videoRef===undefined || videoRef.current?.paused || videoRef.current?.ended){
-                return
-            } else{
-                setShowSpeedControl(false);
-                setShowSetting(false);
-                setShowControlBar(false);
-            }
-        }, 3000);
-        setTimeoutId(Number(id));
-    };
     const controlSpeed=(value:number)=>{
         videoRef.current!.playbackRate=value;
         setShowSpeedControl(false);
         setShowSetting(false);
     }
+    const handleCanPlay = () => {
+        setLoading(false);
+        setError(false);
+    };
+
+    const handleError = () => {
+        setLoading(false);
+        setError(true);
+    };
 
     useEffect(() => {
-        if (videoRef.current) {
-            videoRef.current.volume = volume;
-        }
-    }, [volume]);
-    useEffect(() => {
-        return () => {
-            if (timeoutId) clearTimeout(timeoutId);
-        };
-    }, [timeoutId]);
-    useEffect(() => {
+        let hls:Hls
         if (Hls.isSupported() && videoRef.current) {
-            const hls = new Hls();
+            hls = new Hls();
             hls.loadSource(src);
             hls.attachMedia(videoRef.current);
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
                 videoRef.current?.play().then(() => {setLoading(false);setError(false)}).catch((_) => setError(true));
             });
-            hls.on(Hls.Events.ERROR, (event, data) => {
+            hls.on(Hls.Events.ERROR, (_, data) => {
                 if (data.fatal) {
                     switch (data.type) {
                         case Hls.ErrorTypes.NETWORK_ERROR:
@@ -164,16 +140,58 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src}) => {
                 videoRef.current?.play().then(() => {setLoading(false);setError(false)}).catch((_) => setError(true));
             });
         }
+
+        return () => {
+            if (hls){
+                hls.destroy()
+            }
+        };
+    }, [src]);
+
+    useEffect(()=>{
+        if(showControlBar && timeoutId===null){
+            const id = setTimeout(() => {
+                if (videoRef===undefined || videoRef.current?.paused || videoRef.current?.ended){
+                    setTimeoutId(null)
+                } else{
+                    setShowSpeedControl(false);
+                    setShowSetting(false);
+                    setShowControlBar(false);
+                }
+            }, 3000);
+            setTimeoutId(Number(id));
+        }
+    },[showControlBar, timeoutId])
+    
+    useEffect(()=>{
+        const handleForwardRewind = (forward:boolean) => {
+            if (forward){
+                if (videoRef.current) videoRef.current.currentTime += 10;
+                setForwardRewind("快進 10 秒")
+            } else{
+                if (videoRef.current) videoRef.current.currentTime -= 10;
+                setForwardRewind("快退 10 秒")
+            }
+            if (forwardRewindId) clearTimeout(forwardRewindId);
+            const id=setTimeout(() => setForwardRewind(null), 1000);
+            setForwardRewindId(Number(id));
+        };
         const handleKeyDown = (event: KeyboardEvent) => {
             if (videoRef.current) {
                 if (event.key === "ArrowRight") {
-                    resetTimer();
-                    handleFastForward();
+                    if (timeoutId) clearTimeout(timeoutId);
+                    setTimeoutId(null);
+                    setShowControlBar(true);
+                    handleForwardRewind(true);
                 } else if (event.key === "ArrowLeft") {
-                    resetTimer();
-                    handleRewind();
+                    if (timeoutId) clearTimeout(timeoutId);
+                    setTimeoutId(null);
+                    setShowControlBar(true);
+                    handleForwardRewind(false);
                 } else if (event.code === 'Space' ) {
-                    resetTimer();
+                    if (timeoutId) clearTimeout(timeoutId);
+                    setTimeoutId(null);
+                    setShowControlBar(true);
                     event.preventDefault();
                     togglePlayPause();
                 }
@@ -190,15 +208,14 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src}) => {
         };
 
         video!.addEventListener('timeupdate',handleTimeUpdate);
-
-        return () => {
+        return ()=>{
             document.removeEventListener('keydown', handleKeyDown);
             video!.removeEventListener('timeupdate', handleTimeUpdate);
-        };
-    }, [src]);
+        }
+    },[forwardRewindId, timeoutId]);
 
     return (
-        <div ref={containerRef} className={"relative w-full min-h-3.5 items-center content-center"} onMouseMove={resetTimer}>
+        <div ref={containerRef} className={"relative w-full min-h-3.5 items-center content-center"} onMouseMove={()=>{if (timeoutId) clearTimeout(timeoutId);setTimeoutId(null);setShowControlBar(true);}}>
             {loading && <LoadingWave/>}
             {error && <LoadError/>}
             {showIcon && (
@@ -217,7 +234,7 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src}) => {
                 </div>
             )}
             {forwardRewind && <div className="absolute bg-plain-color bg-opacity-20 text-reverse-color font-bold rounded p-1.5 text-sm text-center"  style={{left: `0.5rem`, bottom: `3rem`}}>{forwardRewind}</div>}
-            <video ref={videoRef} className={"w-full min-h-3.5"} onClick={()=> {
+            <video ref={videoRef} className={"w-full min-h-3.5"} onError={handleError} onCanPlay={handleCanPlay} onClick={()=> {
                 if (showSetting) {
                     setShowSpeedControl(false);
                     setShowSetting(false);
