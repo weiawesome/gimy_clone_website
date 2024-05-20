@@ -216,7 +216,7 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src}) => {
 
     return (
         <div ref={containerRef} className={"relative w-full min-h-3.5 items-center content-center"} onMouseMove={()=>{if (timeoutId) clearTimeout(timeoutId);setTimeoutId(null);setShowControlBar(true);}}>
-            {loading && <LoadingWave/>}
+            {loading && !error && <LoadingWave/>}
             {error && <LoadError/>}
             {showIcon && (
                 <div className={`absolute inset-0 flex justify-center items-center transition-opacity duration-700 ${showIcon ? 'opacity-100' : 'opacity-0'}`}>
@@ -234,7 +234,7 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src}) => {
                 </div>
             )}
             {forwardRewind && <div className="absolute bg-plain-color bg-opacity-20 text-reverse-color font-bold rounded p-1.5 text-sm text-center"  style={{left: `0.5rem`, bottom: `3rem`}}>{forwardRewind}</div>}
-            <video ref={videoRef} className={"w-full min-h-3.5"} onError={handleError} onCanPlay={handleCanPlay} onClick={()=> {
+            <video ref={videoRef} className={"w-full h-full min-h-3.5 bg-normal-color"} onError={handleError} onCanPlay={handleCanPlay} onClick={()=> {
                 if (showSetting) {
                     setShowSpeedControl(false);
                     setShowSetting(false);
