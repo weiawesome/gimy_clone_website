@@ -8,6 +8,34 @@ The user can find different film in here, and it will insert the ad in website a
 Furthermore, It made by Next.js and using Tailwind css and deploy by docker.
 
 Fetch the data by [backend project](https://github.com/weiawesome/gimy_clone_api) to get the media and data.
+## How to download
+```shell
+# Ensure to have installed git
+git clone https://github.com/weiawesome/gimy_clone_website.git
+```
+
+Then it will download the whole project into your device.
+
+## How to start
+
+### Start with local
+```shell
+# Ensure to have installed node.js
+npm build
+npm start
+```
+
+Then it will start the service in http://localhost:3000
+
+### Start with docker-compose ( Full Stack )
+```shell
+# Ensure to have installed docker and docker-compose
+cd ./deployment/docker-compose
+docker-compose up -d
+```
+
+Then it will start the service in http://localhost
+
 ## Main Function
 ### For User
 1. Browse the film classify by film type
@@ -28,7 +56,7 @@ Fetch the data by [backend project](https://github.com/weiawesome/gimy_clone_api
    3. The ad is a static image file in the website
 2. Check the advertisement period
 
-## User Interface ( RWD )
+## User Interface
 ### Home Page
 ![home_page.png](assets/home_page.png)
 ### Different Type Page 
