@@ -12,6 +12,7 @@ import {GetRecommendFilms} from "@/service/get_recommend_films";
 import {HomeFilmListProps, TypeFilmList} from "@/data/utils";
 import {GetPopularTypeFilms} from "@/service/get_popular_films";
 import {GetServerSideProps} from 'next';
+import Head from "next/head";
 export const getServerSideProps: GetServerSideProps = async () => {
     const  homeList= await GetRecommendFilms()
     if (!homeList) {
@@ -50,6 +51,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
 const App:React.FC<HomeFilmListProps>=({homeList,todayList,typeList})=> {
   return (
       <main>
+          <Head>
+              <title>Wei-Gimy 維劇迷 - 高清追劇首選</title>
+          </Head>
           <TitleBar index={HomeTypeInformation.index}></TitleBar>
           <ScrollToTopButton></ScrollToTopButton>
           <FilmList list={homeList}></FilmList>
